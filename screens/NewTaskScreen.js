@@ -24,7 +24,7 @@ export default function NewTaskScreen({ route, navigation }) {
       <Button
         mode="contained"
         onPress={handleSave}
-        color={theme.colors.primary}
+        buttonColor={theme.colors.primary}
       >
         Save
       </Button>
