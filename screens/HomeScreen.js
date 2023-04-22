@@ -32,9 +32,7 @@ export default function HomeScreen({ navigation }) {
   }
 
   function handleNewProject() {
-    const newProject = { id: projects.length + 1, name, tasks: [] };
-    setProjects([...projects, newProject]);
-    navigation.goBack();
+    navigation.navigate("NewProject");
   }
 
   return (
