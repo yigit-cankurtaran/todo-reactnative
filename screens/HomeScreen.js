@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList, AsyncStorage } from "react-native";
+import { View, FlatList } from "react-native";
 import { List, Divider, FAB, useTheme } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function HomeScreen({ navigation }) {
   const theme = useTheme();
