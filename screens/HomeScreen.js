@@ -1,14 +1,24 @@
-import React from "react";
-import { View, FlatList } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, FlatList, AsyncStorage } from "react-native";
 import { List, Divider, FAB, useTheme } from "react-native-paper";
 
 export default function HomeScreen({ navigation }) {
   const theme = useTheme();
-  const projects = [
-    { id: 1, name: "Project 1" },
-    { id: 2, name: "Project 2" },
-    { id: 3, name: "Project 3" },
-  ];
+  const [projects, setProjects] = useState([]);
+
+  // load data from async storage on component mount
+  useEffect(() => {
+    AsyncStorage.getItem("projects").then((data) => {
+      if (data) {
+        setProjects(JSON.parse(data));
+      }
+    });
+  }, []);
+
+  // save data to async storage on projects change
+  useEffect(() => {
+    AsyncStorage.setItem("projects", JSON.stringify(projects));
+  }, [projects]);
 
   function renderItem({ item }) {
     return (
@@ -19,6 +29,12 @@ export default function HomeScreen({ navigation }) {
         }
       />
     );
+  }
+
+  function handleNewProject() {
+    const newProject = { id: projects.length + 1, name, tasks: [] };
+    setProjects([...projects, newProject]);
+    navigation.goBack();
   }
 
   return (
