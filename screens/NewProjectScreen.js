@@ -6,6 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function NewProjectScreen({ navigation }) {
   const theme = useTheme();
   const [projectName, setProjectName] = React.useState("");
+  const [projects, setProjects] = React.useState([]);
 
   async function handleSave() {
     try {
@@ -19,6 +20,7 @@ export default function NewProjectScreen({ navigation }) {
         JSON.stringify(NewProject)
       );
       console.log(`New project ${NewProject.name} saved!`);
+      setProjects([...projects, NewProject]);
       navigation.goBack();
     } catch (e) {
       console.log(e);
