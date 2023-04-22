@@ -1,15 +1,26 @@
 import React from "react";
 import { View, FlatList } from "react-native";
 import { List, Divider, FAB, useTheme } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ProjectScreen({ route, navigation }) {
   const theme = useTheme();
   const { id, name } = route.params;
-  const tasks = [
-    { id: 1, name: "Task 1" },
-    { id: 2, name: "Task 2" },
-    { id: 3, name: "Task 3" },
-  ];
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    async function fetchTasks() {
+      try {
+        const tasksJson = await AsyncStorage.getItem(id.toString());
+        if (tasksJson != null) {
+          setTasks(JSON.parse(tasksJson));
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    fetchTasks();
+  }, []);
 
   function renderItem({ item }) {
     return (
