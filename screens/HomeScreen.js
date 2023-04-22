@@ -7,19 +7,19 @@ export default function HomeScreen({ navigation }) {
   const theme = useTheme();
   const [projects, setProjects] = useState([]);
 
-  // load data from async storage on component mount
   useEffect(() => {
-    AsyncStorage.getItem("projects").then((data) => {
-      if (data) {
-        setProjects(JSON.parse(data));
+    const getProjects = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem("projects");
+        if (jsonValue != null) {
+          setProjects(JSON.parse(jsonValue));
+        }
+      } catch (e) {
+        console.log(e);
       }
-    });
+    };
+    getProjects();
   }, []);
-
-  // save data to async storage on projects change
-  useEffect(() => {
-    AsyncStorage.setItem("projects", JSON.stringify(projects));
-  }, [projects]);
 
   function renderItem({ item }) {
     return (
