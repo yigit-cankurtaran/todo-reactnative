@@ -10,10 +10,10 @@ export default function HomeScreen({ navigation }) {
   useEffect(() => {
     const getProjects = async () => {
       try {
-        const jsonValue = await AsyncStorage.getItem("projects");
-        if (jsonValue != null) {
-          setProjects(JSON.parse(jsonValue));
-        }
+        const keys = await AsyncStorage.getAllKeys();
+        const projects = await AsyncStorage.multiGet(keys);
+
+        setProjects(projects.map(([key, value]) => JSON.parse(value)));
       } catch (e) {
         console.log(e);
       }
@@ -41,8 +41,8 @@ export default function HomeScreen({ navigation }) {
       <FlatList
         data={projects}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        ItemSeparatorComponent={Divider}
+        keyExtractor={(item) => (item.id ? item.id.toString() : "")}
+        ItemSeparatorComponent={() => <Divider />}
       />
       {/* the above line might be problematic, if so just change the divider part into an arrow function */}
       <FAB

@@ -1,26 +1,40 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 import { TextInput, Button, useTheme } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function NewProjectScreen({ navigation }) {
   const theme = useTheme();
-  const [projectName, setProjectName] = React.useState("");
-  const [projects, setProjects] = React.useState([]);
+  const [projectName, setProjectName] = useState("");
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    const getProjects = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem("projects");
+        if (jsonValue !== null) {
+          setProjects(JSON.parse(jsonValue));
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getProjects();
+  }, []);
 
   async function handleSave() {
     try {
-      const NewProject = {
+      const newProject = {
         id: new Date().getTime(),
         name: projectName,
         tasks: [],
       };
       await AsyncStorage.setItem(
-        NewProject.id.toString(),
-        JSON.stringify(NewProject)
+        newProject.id.toString(),
+        JSON.stringify(newProject)
       );
-      console.log(`New project ${NewProject.name} saved!`);
-      setProjects([...projects, NewProject]);
+      console.log(`New project ${newProject.name} saved!`);
+      setProjects([...projects, newProject]);
       navigation.goBack();
     } catch (e) {
       console.log(e);
@@ -38,7 +52,7 @@ export default function NewProjectScreen({ navigation }) {
       <Button
         mode="contained"
         onPress={handleSave}
-        buttonColor={theme.colors.primary}
+        color={theme.colors.primary}
       >
         Save
       </Button>
