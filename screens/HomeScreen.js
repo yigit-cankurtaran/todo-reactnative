@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, FlatList, RefreshControl } from "react-native";
 import { List, Divider, FAB, useTheme } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function HomeScreen({ navigation }) {
   const theme = useTheme();
@@ -20,12 +21,18 @@ export default function HomeScreen({ navigation }) {
     }
   };
 
-  useEffect(() => {
-    if (shouldFetchProjects) {
+  useFocusEffect(
+    React.useCallback(() => {
       fetchProjects();
-      setShouldFetchProjects(false);
-    }
-  }, [shouldFetchProjects]);
+    }, [])
+  );
+
+  // useEffect(() => {
+  //   if (shouldFetchProjects) {
+  //     fetchProjects();
+  //     setShouldFetchProjects(false);
+  //   }
+  // }, [shouldFetchProjects]);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -44,9 +51,7 @@ export default function HomeScreen({ navigation }) {
   }
 
   function handleNewProject() {
-    navigation.navigate("NewProject", {
-      onGoBack: () => fetchProjects(),
-    });
+    navigation.navigate("NewProject");
   }
 
   return (
