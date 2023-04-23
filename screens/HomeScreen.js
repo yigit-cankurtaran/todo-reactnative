@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList } from "react-native";
+import { View, FlatList, RefreshControl } from "react-native";
 import { List, Divider, FAB, useTheme } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -7,23 +7,30 @@ export default function HomeScreen({ navigation }) {
   const theme = useTheme();
   const [projects, setProjects] = useState([]);
   const [shouldFetchProjects, setShouldFetchProjects] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchProjects = async () => {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+      const projects = await AsyncStorage.multiGet(keys);
+
+      setProjects(projects.map(([key, value]) => JSON.parse(value)));
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
-    const getProjects = async () => {
-      try {
-        const keys = await AsyncStorage.getAllKeys();
-        const projects = await AsyncStorage.multiGet(keys);
-
-        setProjects(projects.map(([key, value]) => JSON.parse(value)));
-      } catch (e) {
-        console.log(e);
-      }
-    };
     if (shouldFetchProjects) {
-      getProjects();
+      fetchProjects();
       setShouldFetchProjects(false);
     }
   }, [shouldFetchProjects]);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    fetchProjects().then(() => setRefreshing(false));
+  }, []);
 
   function renderItem({ item }) {
     return (
@@ -48,6 +55,9 @@ export default function HomeScreen({ navigation }) {
         keyExtractor={(item) => (item.id ? item.id.toString() : "")}
         // the above line might be problematic, if so just change the ternary part into just toString()
         ItemSeparatorComponent={() => <Divider />}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
       {/* the above line might be problematic, if so just change the divider part into an arrow function */}
       <FAB
