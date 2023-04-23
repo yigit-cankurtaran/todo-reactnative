@@ -44,7 +44,9 @@ export default function HomeScreen({ navigation }) {
   }
 
   function handleNewProject() {
-    navigation.navigate("NewProject");
+    navigation.navigate("NewProject", {
+      onGoBack: () => fetchProjects(),
+    });
   }
 
   return (
