@@ -6,6 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function HomeScreen({ navigation }) {
   const theme = useTheme();
   const [projects, setProjects] = useState([]);
+  const [shouldFetchProjects, setShouldFetchProjects] = useState(true);
 
   useEffect(() => {
     const getProjects = async () => {
@@ -18,8 +19,11 @@ export default function HomeScreen({ navigation }) {
         console.log(e);
       }
     };
-    getProjects();
-  }, []);
+    if (shouldFetchProjects) {
+      getProjects();
+      setShouldFetchProjects(false);
+    }
+  }, [shouldFetchProjects]);
 
   function renderItem({ item }) {
     return (
@@ -42,13 +46,14 @@ export default function HomeScreen({ navigation }) {
         data={projects}
         renderItem={renderItem}
         keyExtractor={(item) => (item.id ? item.id.toString() : "")}
+        // the above line might be problematic, if so just change the ternary part into just toString()
         ItemSeparatorComponent={() => <Divider />}
       />
       {/* the above line might be problematic, if so just change the divider part into an arrow function */}
       <FAB
         style={{ position: "absolute", margin: 16, right: 0, bottom: 0 }}
         icon="plus"
-        onPress={() => navigation.navigate("NewProject")}
+        onPress={() => handleNewProject()}
         color={theme.colors.surface}
       />
     </View>
