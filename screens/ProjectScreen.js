@@ -20,7 +20,7 @@ export default function ProjectScreen({ route, navigation }) {
       }
     }
     fetchTasks();
-  }, []);
+  }, [id]);
 
   function renderItem({ item }) {
     return (
