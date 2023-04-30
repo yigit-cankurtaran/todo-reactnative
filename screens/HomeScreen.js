@@ -57,7 +57,7 @@ export default function HomeScreen({ navigation }) {
         }
         right={() => (
           <TouchableOpacity onPress={() => handleDeleteProject(item.id)}>
-            <List.Icon color="{theme.colors.primary}" icon="delete" />
+            <List.Icon color={theme.colors.primary} icon="delete" />
           </TouchableOpacity>
         )}
       />
