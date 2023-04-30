@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList, RefreshControl } from "react-native";
+import {
+  View,
+  FlatList,
+  RefreshControl,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import { List, Divider, FAB, useTheme } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
@@ -27,17 +33,20 @@ export default function HomeScreen({ navigation }) {
     }, [])
   );
 
-  // useEffect(() => {
-  //   if (shouldFetchProjects) {
-  //     fetchProjects();
-  //     setShouldFetchProjects(false);
-  //   }
-  // }, [shouldFetchProjects]);
-
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     fetchProjects().then(() => setRefreshing(false));
   }, []);
+
+  function handleDeleteProject(id) {
+    try {
+      AsyncStorage.removeItem(id.toString());
+      setProjects(projects.filter((project) => project.id !== id));
+      setShouldFetchProjects(true);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   function renderItem({ item }) {
     return (
@@ -47,11 +56,9 @@ export default function HomeScreen({ navigation }) {
           navigation.navigate("Project", { id: item.id, name: item.name })
         }
         right={() => (
-          <List.Icon
-            color={theme.colors.primary}
-            icon="delete"
-            onPress={() => handleDelete(item.id)}
-          />
+          <TouchableOpacity onPress={() => handleDeleteProject(item.id)}>
+            <List.Icon color="{theme.colors.primary}" icon="delete" />
+          </TouchableOpacity>
         )}
       />
     );
