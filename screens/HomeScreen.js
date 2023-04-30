@@ -46,6 +46,13 @@ export default function HomeScreen({ navigation }) {
         onPress={() =>
           navigation.navigate("Project", { id: item.id, name: item.name })
         }
+        right={() => (
+          <List.Icon
+            color={theme.colors.primary}
+            icon="delete"
+            onPress={() => handleDelete(item.id)}
+          />
+        )}
       />
     );
   }
