@@ -56,7 +56,29 @@ export default function HomeScreen({ navigation }) {
           navigation.navigate("Project", { id: item.id, name: item.name })
         }
         right={() => (
-          <TouchableOpacity onPress={() => handleDeleteProject(item.id)}>
+          <TouchableOpacity
+            onPress={() => {
+              Alert.alert(
+                "Delete Project",
+                `Are you sure you want to delete ${item.name}?`,
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  {
+                    text: "Delete",
+                    style: "destructive",
+                    onPress: () => {
+                      handleDeleteProject(item.id);
+                      console.log(`Project ${item.name} deleted!`);
+                    },
+                  },
+                ]
+              );
+            }}
+          >
             <List.Icon color={theme.colors.primary} icon="delete" />
           </TouchableOpacity>
         )}
