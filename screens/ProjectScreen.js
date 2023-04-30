@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList } from "react-native";
+import { View, FlatList, StyleSheet } from "react-native";
 import { List, Divider, FAB, useTheme } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import NewTasksScreen from "./NewTaskScreen";
 
 export default function ProjectScreen({ route, navigation }) {
   const theme = useTheme();
