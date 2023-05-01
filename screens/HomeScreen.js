@@ -87,7 +87,7 @@ export default function HomeScreen({ navigation }) {
   }
 
   function handleNewProject() {
-    navigation.navigate("NewProject");
+    navigation.navigate("New Project");
   }
 
   return (

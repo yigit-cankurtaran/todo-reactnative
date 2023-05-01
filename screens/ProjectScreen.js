@@ -28,7 +28,9 @@ export default function ProjectScreen({ route, navigation }) {
   function handleAddTask() {
     console.log(id);
     console.log(name);
-    navigation.navigate("New Task", { projectId: id, name });
+    const newTaskId = Date.now().toString();
+    // if a bug happens here delete toString()
+    navigation.navigate("New Task", { projectId: id, taskId: newTaskId });
   }
 
   async function handleDeleteTask(taskId) {
@@ -55,7 +57,8 @@ export default function ProjectScreen({ route, navigation }) {
     }
   }
 
-  function renderTaskItem({ item }) {
+  function renderTaskItem({ item, index }) {
+    console.log(`item: ${item}`);
     return (
       <List.Item
         title={item.name}
@@ -71,9 +74,12 @@ export default function ProjectScreen({ route, navigation }) {
         left={() => (
           <List.Icon
             color={theme.colors.primary}
-            icon={item.done ? "check-box-outline" : "check-box-outline-blank"}
+            icon={
+              item.done ? "checkbox-marked-outline" : "checkbox-blank-outline"
+            }
           />
         )}
+        key={item.id + index}
       />
     );
   }
@@ -86,8 +92,6 @@ export default function ProjectScreen({ route, navigation }) {
           data={tasks}
           renderItem={renderTaskItem}
           keyExtractor={(item) => item.id.toString()}
-          // ItemSeparatorComponent={Divider}
-          // if a bug happens uncomment the line above
         />
       </List.Section>
       <FAB
