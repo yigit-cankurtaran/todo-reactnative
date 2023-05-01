@@ -6,8 +6,8 @@ import NewTaskScreen from "./NewTaskScreen";
 
 export default function ProjectScreen({ route, navigation }) {
   const theme = useTheme();
-  const { id, name } = route.params;
-  const [tasks, setTasks] = useState([]);
+  const { id, name, tasks } = route.params;
+  const [taskName, setTaskName] = useState("");
 
   console.log(route.params);
 
@@ -29,8 +29,11 @@ export default function ProjectScreen({ route, navigation }) {
     console.log(id);
     console.log(name);
     const newTaskId = Date.now().toString();
-    // if a bug happens here delete toString()
-    navigation.navigate("New Task", { projectId: id, taskId: newTaskId });
+    navigation.navigate("New Task", {
+      projectId: id,
+      taskId: newTaskId,
+      tasks,
+    });
   }
 
   async function handleDeleteTask(taskId) {
@@ -39,6 +42,12 @@ export default function ProjectScreen({ route, navigation }) {
       await AsyncStorage.setItem(id.toString(), JSON.stringify(updatedTasks));
       setTasks(updatedTasks);
       console.log(`Task ${taskId} deleted`);
+      if (updatedTasks.length === 0) {
+        await AsyncStorage.removeItem(id.toString());
+        navigation.goBack();
+        console.log(`Project ${id} deleted`);
+      }
+      // did not fix
     } catch (e) {
       console.log(e);
     }
@@ -46,9 +55,13 @@ export default function ProjectScreen({ route, navigation }) {
 
   async function handleToggleTask(taskId) {
     try {
-      const updatedTasks = tasks.map((task) =>
-        task.id === taskId ? { ...task, done: !task.done } : task
-      );
+      const index = tasks.findIndex((task) => task.id === taskId);
+      if (index === -1) {
+        console.log(`No task with id ${taskId}`);
+        return;
+      }
+      const updatedTasks = [...tasks];
+      updatedTasks[index] = { ...tasks[index], done: !tasks[index].done };
       await AsyncStorage.setItem(id.toString(), JSON.stringify(updatedTasks));
       setTasks(updatedTasks);
       console.log(`Task ${taskId} toggled`);
