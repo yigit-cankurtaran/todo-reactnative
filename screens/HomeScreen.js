@@ -23,8 +23,17 @@ export default function HomeScreen({ navigation }) {
 
       setProjects(
         projects
-          .map(([key, value]) => JSON.parse(value))
-          .filter((project) => project.id !== undefined)
+          .map(([key, value]) => {
+            try {
+              const parsedValue = JSON.parse(value);
+              if (parsedValue && parsedValue.id) {
+                return parsedValue;
+              }
+            } catch (e) {
+              console.log(e);
+            }
+          })
+          .filter((project) => project !== undefined)
       );
     } catch (e) {
       console.log(e);
