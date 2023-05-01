@@ -27,7 +27,8 @@ export default function ProjectScreen({ route, navigation }) {
   }, [id]);
 
   function handleAddTask() {
-    navigation.navigate("NewTask", { projectID: id, projectName: name });
+    console.log(id);
+    navigation.navigate("New Task", { projectID: id, projectName: name });
   }
 
   async function handleDeleteTask(taskId) {

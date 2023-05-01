@@ -14,8 +14,8 @@ export default function Navigation() {
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Project" component={ProjectScreen} />
-        <Stack.Screen name="NewProject" component={NewProjectScreen} />
-        <Stack.Screen name="NewTask" component={NewTaskScreen} />
+        <Stack.Screen name="New Project" component={NewProjectScreen} />
+        <Stack.Screen name="New Task" component={NewTaskScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
