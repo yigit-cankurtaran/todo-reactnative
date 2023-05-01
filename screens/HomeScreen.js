@@ -21,7 +21,11 @@ export default function HomeScreen({ navigation }) {
       const keys = await AsyncStorage.getAllKeys();
       const projects = await AsyncStorage.multiGet(keys);
 
-      setProjects(projects.map(([key, value]) => JSON.parse(value)));
+      setProjects(
+        projects
+          .map(([key, value]) => JSON.parse(value))
+          .filter((project) => project.id !== undefined)
+      );
     } catch (e) {
       console.log(e);
     }
