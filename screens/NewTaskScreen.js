@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { TouchableOpacity, Text, View } from "react-native";
 import { TextInput, Button, useTheme } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -9,6 +9,7 @@ export default function NewTaskScreen({ route, navigation }) {
   const [taskName, setTaskName] = React.useState("");
 
   async function handleSave() {
+    console.log(route.params);
     if (taskName === "") {
       return;
     }
