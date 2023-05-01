@@ -5,10 +5,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function NewTaskScreen({ route, navigation }) {
   const theme = useTheme();
-  const { projectId } = route.params;
+  const { projectId, name } = route.params;
   const [taskName, setTaskName] = React.useState("");
 
   async function handleSave() {
+    console.log(taskName);
+    console.log(name);
+    console.log(projectId);
+
     if (taskName === "") {
       return;
     }
