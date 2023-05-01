@@ -9,6 +9,9 @@ export default function ProjectScreen({ route, navigation }) {
   const { id, name } = route.params;
   const [tasks, setTasks] = useState([]);
 
+  console.log(`Project ${id} (${name})`);
+  console.log(id.toString());
+
   useEffect(() => {
     async function fetchTasks() {
       try {
@@ -23,30 +26,73 @@ export default function ProjectScreen({ route, navigation }) {
     fetchTasks();
   }, [id]);
 
-  function renderItem({ item }) {
+  function handleAddTask() {
+    navigation.navigate("NewTask", { projectID: id, projectName: name });
+  }
+
+  async function handleDeleteTask(taskId) {
+    try {
+      const updatedTasks = tasks.filter((task) => task.id !== taskId);
+      await AsyncStorage.setItem(id.toString(), JSON.stringify(updatedTasks));
+      setTasks(updatedTasks);
+      console.log(`Task ${taskId} deleted`);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async function handleToggleTask(taskId) {
+    try {
+      const updatedTasks = tasks.map((task) =>
+        task.id === taskId ? { ...task, done: !task.done } : task
+      );
+      await AsyncStorage.setItem(id.toString(), JSON.stringify(updatedTasks));
+      setTasks(updatedTasks);
+      console.log(`Task ${taskId} toggled`);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  function renderTaskItem({ item }) {
     return (
       <List.Item
         title={item.name}
-        onPress={() =>
-          navigation.navigate("NewTask", { id: item.id, name: item.name })
-        }
+        titleStyle={item.done ? { textDecorationLine: "line-through" } : {}}
+        onPress={() => handleToggleTask(item.id)}
+        right={() => (
+          <List.Icon
+            color={theme.colors.primary}
+            icon="delete"
+            onPress={() => handleDeleteTask(item.id)}
+          />
+        )}
+        left={() => (
+          <List.Icon
+            color={theme.colors.primary}
+            icon={item.done ? "check-box-outline" : "check-box-outline-blank"}
+          />
+        )}
       />
     );
   }
 
   return (
     <View style={{ flex: 1 }}>
-      <List.Subheader>{name}</List.Subheader>
-      <FlatList
-        data={tasks}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        ItemSeparatorComponent={Divider}
-      />
+      <List.Section>
+        <List.Subheader>{name}</List.Subheader>
+        <FlatList
+          data={tasks}
+          renderItem={renderTaskItem}
+          keyExtractor={(item) => item.id.toString()}
+          // ItemSeparatorComponent={Divider}
+          // if a bug happens uncomment the line above
+        />
+      </List.Section>
       <FAB
         style={{ position: "absolute", margin: 16, right: 0, bottom: 0 }}
         icon="plus"
-        onPress={() => navigation.navigate("NewTask")}
+        onPress={handleAddTask}
         color={theme.colors.surface}
       />
     </View>
