@@ -53,9 +53,13 @@ export default function HomeScreen({ navigation }) {
 
   function handleDeleteProject(id) {
     try {
-      AsyncStorage.removeItem(id.toString());
-      setProjects(projects.filter((project) => project.id !== id));
-      setShouldFetchProjects(true);
+      AsyncStorage.removeItem(id.toString()).then(() => {
+        setProjects((prevProjects) =>
+          prevProjects.filter((project) => project.id !== id)
+        );
+        setShouldFetchProjects(true);
+      });
+      console.log(`Project ${id} deleted!`);
     } catch (e) {
       console.log(e);
     }

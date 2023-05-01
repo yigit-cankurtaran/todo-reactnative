@@ -21,6 +21,7 @@ export default function NewTaskScreen({ route, navigation }) {
       const updatedTasks = Array.isArray(tasks)
         ? [...tasks, newTask]
         : [newTask];
+      // this part breaks my code.
 
       await AsyncStorage.setItem(
         projectId.toString(),
