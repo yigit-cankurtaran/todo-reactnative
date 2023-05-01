@@ -18,7 +18,10 @@ export default function NewTaskScreen({ route, navigation }) {
     if (taskName.trim() === "") return;
     try {
       const newTask = { id: taskId, name: taskName, done: false };
-      const updatedTasks = [...tasks, newTask];
+      const updatedTasks = Array.isArray(tasks)
+        ? [...tasks, newTask]
+        : [newTask];
+
       await AsyncStorage.setItem(
         projectId.toString(),
         JSON.stringify(updatedTasks)
