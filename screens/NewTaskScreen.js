@@ -1,15 +1,14 @@
 import React from "react";
-import { TouchableOpacity, Text, View } from "react-native";
-import { TextInput, Button, useTheme } from "react-native-paper";
+import { View, TextInput, TouchableOpacity, Text } from "react-native";
+import { useTheme } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function NewTaskScreen({ route, navigation }) {
   const theme = useTheme();
-  const { projectId, name } = route.params;
+  const { projectId } = route.params;
   const [taskName, setTaskName] = React.useState("");
 
   async function handleSave() {
-    console.log(route.params);
     if (taskName === "") {
       return;
     }
@@ -46,13 +45,16 @@ export default function NewTaskScreen({ route, navigation }) {
         onChangeText={setTaskName}
         style={{ marginBottom: 16 }}
       />
-      <Button
-        mode="contained"
+      <TouchableOpacity
         onPress={handleSave}
-        buttonColor={theme.colors.primary}
+        style={{
+          backgroundColor: theme.colors.primary,
+          padding: 12,
+          borderRadius: 5,
+        }}
       >
-        Save
-      </Button>
+        <Text style={{ color: "#FFF", textAlign: "center" }}>Save</Text>
+      </TouchableOpacity>
     </View>
   );
 }
