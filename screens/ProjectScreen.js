@@ -9,8 +9,7 @@ export default function ProjectScreen({ route, navigation }) {
   const { id, name } = route.params;
   const [tasks, setTasks] = useState([]);
 
-  console.log(`Project ${id} (${name})`);
-  console.log(id.toString());
+  console.log(route.params);
 
   useEffect(() => {
     async function fetchTasks() {
@@ -28,7 +27,8 @@ export default function ProjectScreen({ route, navigation }) {
 
   function handleAddTask() {
     console.log(id);
-    navigation.navigate("New Task", { projectID: id, projectName: name });
+    console.log(name);
+    navigation.navigate("New Task", { projectId: id, name });
   }
 
   async function handleDeleteTask(taskId) {
