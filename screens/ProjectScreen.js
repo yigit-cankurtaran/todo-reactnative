@@ -6,8 +6,8 @@ import NewTaskScreen from "./NewTaskScreen";
 
 export default function ProjectScreen({ route, navigation }) {
   const theme = useTheme();
-  const { id, name, tasks } = route.params;
-  const [taskName, setTaskName] = useState("");
+  const { id, name } = route.params;
+  const [tasks, setTasks] = useState([]);
 
   console.log(route.params);
 
