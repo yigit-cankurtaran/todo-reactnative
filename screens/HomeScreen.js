@@ -119,7 +119,6 @@ export default function HomeScreen({ navigation }) {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       />
-      {/* the above line might be problematic, if so just change the divider part into an arrow function */}
       <FAB
         style={{ position: "absolute", margin: 16, right: 0, bottom: 0 }}
         icon="plus"

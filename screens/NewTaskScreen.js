@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { Button, useTheme } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 export default function NewTaskScreen({ route, navigation }) {
   const theme = useTheme();
