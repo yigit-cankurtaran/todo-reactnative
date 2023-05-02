@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { View, FlatList, Alert } from "react-native";
 import { List, FAB, useTheme } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from "@react-navigation/native";
 
 export default function ProjectScreen({ route, navigation }) {
   const { id, name } = route.params;
