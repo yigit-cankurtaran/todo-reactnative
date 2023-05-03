@@ -20,11 +20,11 @@ export default function NewTaskScreen() {
       completed: false,
     };
     // update project data with new task
-    const updatedTasks = [...tasks, newTask];
+    let updatedTasks = [...tasks, newTask];
     // set updated project data as parameter and navigate back to ProjectScreen
-    navigation.setParams({ tasks: updatedTasks });
+    navigation.setParams({ tasks: tasks });
     console.log(updatedTasks);
-    console.log(tasks);
+    // THE REASON FOR THE TASKS NOT DISPLAYING MIGHT BE BC I'M DISPLAYING TASKS AND NOT UPDATEDTASKS
     console.log(`Task ${newTask.name} with id ${newTask.id} saved.`);
     navigation.goBack();
   }
