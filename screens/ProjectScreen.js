@@ -95,14 +95,14 @@ export default function ProjectScreen({ route, navigation }) {
         onPress={() => handleToggleTask(item.id)}
         right={() => (
           <List.Icon
-            color={theme.colors.primary}
+            color={theme.colors.secondary}
             icon="delete"
             onPress={() => handleDeleteTask(item.id)}
           />
         )}
         left={() => (
           <List.Icon
-            color={theme.colors.primary}
+            color={theme.colors.secondary}
             icon={
               item.done ? "checkbox-marked-outline" : "checkbox-blank-outline"
             }

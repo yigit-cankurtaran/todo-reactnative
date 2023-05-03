@@ -7,12 +7,12 @@ export default function NewTaskScreen() {
   const [taskName, setTaskName] = useState("");
   const navigation = useNavigation();
   const route = useRoute();
-  const project = route.params.project; // get the project data from the route
+  const project = route.params.project || { tasks: [] }; // ensure project has tasks
 
   function saveTask() {
     // create new task
     const newTask = {
-      id: Math.random().toString(),
+      id: (Math.random() * 100).toString(),
       name: taskName,
       completed: false,
     };
@@ -23,6 +23,9 @@ export default function NewTaskScreen() {
     };
     // set updated project data as parameter and navigate back to ProjectScreen
     navigation.setParams({ project: updatedProject });
+    console.log(updatedProject);
+    console.log(project);
+    console.log(`Task ${newTask.name} with id ${newTask.id} saved.`);
     navigation.goBack();
   }
 
