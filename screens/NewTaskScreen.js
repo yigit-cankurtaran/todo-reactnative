@@ -7,24 +7,24 @@ export default function NewTaskScreen() {
   const [taskName, setTaskName] = useState("");
   const navigation = useNavigation();
   const route = useRoute();
-  const project = route.params.project || { tasks: [] }; // ensure project has tasks
+  // const project = route.params.project || { tasks: [] }; // ensure project has tasks
+  const { projectId, taskId, tasks } = route.params;
+  console.log(`Project id: ${projectId}`);
+  console.log(`Task id: ${taskId}`);
 
   function saveTask() {
     // create new task
     const newTask = {
-      id: (Math.random() * 100).toString(),
+      id: Date.now().toString(),
       name: taskName,
       completed: false,
     };
     // update project data with new task
-    const updatedProject = {
-      ...project,
-      tasks: [...project.tasks, newTask],
-    };
+    const updatedTasks = [...tasks, newTask];
     // set updated project data as parameter and navigate back to ProjectScreen
-    navigation.setParams({ project: updatedProject });
-    console.log(updatedProject);
-    console.log(project);
+    navigation.setParams({ tasks: updatedTasks });
+    console.log(updatedTasks);
+    console.log(tasks);
     console.log(`Task ${newTask.name} with id ${newTask.id} saved.`);
     navigation.goBack();
   }
@@ -49,5 +49,6 @@ const styles = StyleSheet.create({
   },
   button: {
     alignSelf: "center",
+    backgroundColor: "purple",
   },
 });
