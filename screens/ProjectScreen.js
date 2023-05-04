@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList, Alert } from "react-native";
-import { List, FAB, useTheme } from "react-native-paper";
+import { Alert, FlatList, StyleSheet, View } from "react-native";
+import { FAB, List, useTheme, Text } from "react-native-paper";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function ProjectScreen({ route, navigation }) {
+export default function ProjectScreen() {
+  const route = useRoute();
+  const navigation = useNavigation();
   const { id, name } = route.params;
   const [tasks, setTasks] = useState([]);
   const theme = useTheme();
 
-  // Fetching tasks from AsyncStorage when the component mounts
   useEffect(() => {
-    async function fetchTasks() {
+    async function loadTasks() {
       try {
         const jsonValue = await AsyncStorage.getItem(`@tasks_${id}`);
         if (jsonValue != null) {
@@ -20,21 +22,25 @@ export default function ProjectScreen({ route, navigation }) {
         console.log(e);
       }
     }
-    fetchTasks();
+    loadTasks();
   }, []);
 
-  // Saving tasks to AsyncStorage when the tasks state changes
+  // tasks are being pulled from asynstorage but not being displayed
+  // because they're not being saved into asyncstorage
+  // move the saveTasks function to the NewTaskScreen.js file
+
   useEffect(() => {
     async function saveTasks() {
       try {
         const jsonValue = JSON.stringify(tasks);
         await AsyncStorage.setItem(`@tasks_${id}`, jsonValue);
+        console.log("Saving tasks:", tasks); // Debugging
       } catch (e) {
         console.log(e);
       }
     }
     saveTasks();
-  }, [tasks]);
+  }, [tasks]); // Call saveTasks whenever tasks is updated
 
   function handleAddTask() {
     console.log(id);
@@ -95,40 +101,48 @@ export default function ProjectScreen({ route, navigation }) {
         onPress={() => handleToggleTask(item.id)}
         right={() => (
           <List.Icon
-            color={theme.colors.secondary}
-            icon="delete"
-            onPress={() => handleDeleteTask(item.id)}
+            color={theme.colors.primary}
+            icon={item.done ? "check-circle-outline" : "circle-outline"}
           />
         )}
         left={() => (
           <List.Icon
-            color={theme.colors.secondary}
-            icon={
-              item.done ? "checkbox-marked-outline" : "checkbox-blank-outline"
-            }
+            color={theme.colors.primary}
+            icon="drag"
+            style={{ backgroundColor: "transparent" }}
           />
         )}
-        key={item.id + index}
+        onLongPress={() => handleDeleteTask(item.id)}
       />
     );
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      <List.Section>
-        <List.Subheader>{name}</List.Subheader>
-        <FlatList
-          data={tasks}
-          renderItem={renderTaskItem}
-          keyExtractor={(item) => item.id.toString()}
-        />
-      </List.Section>
-      <FAB
-        style={{ position: "absolute", margin: 16, right: 0, bottom: 0 }}
-        icon="plus"
-        onPress={handleAddTask}
-        color={theme.colors.surface}
+    <View style={styles.container}>
+      <Text>{name}</Text>
+      <FlatList
+        data={tasks}
+        renderItem={renderTaskItem}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.listContainer}
       />
+      <FAB style={styles.fab} onPress={handleAddTask} icon="plus" />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  listContainer: {
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+  },
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 0,
+  },
+});
