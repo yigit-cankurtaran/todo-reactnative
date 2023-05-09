@@ -15,6 +15,7 @@ export default function NewTaskScreen() {
 
   function saveTask() {
     // create new task
+    // might need to change the id to taskId
     const newTask = {
       id: Date.now().toString(),
       name: taskName,
