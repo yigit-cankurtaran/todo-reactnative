@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Alert, FlatList, View } from "react-native";
-import { FAB, List, Text } from "react-native-paper";
+import { Alert, FlatList, View, Text, StyleSheet } from "react-native";
+import { FAB, List } from "react-native-paper";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import theme from "../Theme";
 
 export default function ProjectScreen() {
   const route = useRoute();
@@ -29,13 +30,13 @@ export default function ProjectScreen() {
       try {
         const jsonValue = JSON.stringify(tasks);
         await AsyncStorage.setItem(`@tasks_${id}`, jsonValue);
-        console.log("Saving tasks:", tasks); // Debugging
+        console.log("Saving tasks:", tasks);
       } catch (e) {
         console.log(e);
       }
     }
     saveTasks();
-  }, [tasks]); // Call saveTasks whenever tasks is updated
+  }, [tasks]);
 
   function handleAddTask() {
     console.log(id);
@@ -76,8 +77,6 @@ export default function ProjectScreen() {
               }
             }
             removeTask();
-
-            // Remove task from tasks state
             const filteredTasks = tasks.filter((task) => task.id !== taskId);
             setTasks(filteredTasks);
           },
@@ -87,8 +86,7 @@ export default function ProjectScreen() {
     );
   }
 
-  function renderTaskItem({ item, index }) {
-    console.log(`item: ${item}`);
+  function renderTaskItem({ item }) {
     return (
       <List.Item
         title={item.name}
@@ -96,13 +94,13 @@ export default function ProjectScreen() {
         onPress={() => handleToggleTask(item.id)}
         right={() => (
           <List.Icon
-            color={theme.colors.primary}
+            color={theme.colors.secondary}
             icon={item.done ? "check-circle-outline" : "circle-outline"}
           />
         )}
         left={() => (
           <List.Icon
-            color={theme.colors.primary}
+            color={theme.colors.secondary}
             icon="drag"
             style={{ backgroundColor: "transparent" }}
           />
@@ -118,10 +116,26 @@ export default function ProjectScreen() {
       <FlatList
         data={tasks}
         renderItem={renderTaskItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.taskId}
         contentContainerStyle={styles.listContainer}
       />
       <FAB style={styles.fab} onPress={handleAddTask} icon="plus" />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+  listContainer: {
+    padding: 16,
+  },
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 0,
+  },
+});

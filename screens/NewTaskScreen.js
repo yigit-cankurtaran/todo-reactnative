@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function NewTaskScreen() {
   const [taskName, setTaskName] = useState("");
@@ -21,8 +22,8 @@ export default function NewTaskScreen() {
     };
     // update project data with new task
     let updatedTasks = [...tasks, newTask];
-    // set updated project data as parameter and navigate back to ProjectScreen
-    navigation.setParams(updatedTasks);
+    // save updatedTasks to async storage
+    AsyncStorage.setItem(`@tasks_${projectId}`, JSON.stringify(updatedTasks));
     console.log(`Tasks: ${JSON.stringify(tasks)}`);
     console.log(`Updated tasks: ${JSON.stringify(updatedTasks)}`);
     // THE REASON FOR THE TASKS NOT DISPLAYING MIGHT BE BC I'M DISPLAYING TASKS AND NOT UPDATEDTASKS
