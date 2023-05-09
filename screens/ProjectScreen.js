@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Alert, FlatList, StyleSheet, View } from "react-native";
-import { FAB, List, useTheme, Text } from "react-native-paper";
+import { Alert, FlatList, View } from "react-native";
+import { FAB, List, Text } from "react-native-paper";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -9,7 +9,6 @@ export default function ProjectScreen() {
   const navigation = useNavigation();
   const { id, name } = route.params;
   const [tasks, setTasks] = useState([]);
-  const theme = useTheme();
 
   useEffect(() => {
     async function loadTasks() {
@@ -24,10 +23,6 @@ export default function ProjectScreen() {
     }
     loadTasks();
   }, []);
-
-  // tasks are being pulled from asynstorage but not being displayed
-  // because they're not being saved into asyncstorage
-  // move the saveTasks function to the NewTaskScreen.js file
 
   useEffect(() => {
     async function saveTasks() {
@@ -130,19 +125,3 @@ export default function ProjectScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  listContainer: {
-    paddingHorizontal: 16,
-    paddingBottom: 16,
-  },
-  fab: {
-    position: "absolute",
-    margin: 16,
-    right: 0,
-    bottom: 0,
-  },
-});
