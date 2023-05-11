@@ -44,19 +44,19 @@ export default function ProjectScreen() {
     const newTaskId = Date.now().toString();
     navigation.navigate("New Task", {
       projectId: id,
-      taskId: newTaskId,
+      id: newTaskId,
       tasks,
     });
   }
 
-  async function handleToggleTask(taskId) {
+  async function handleToggleTask(id) {
     const updatedTasks = tasks.map((task) =>
-      task.id === taskId ? { ...task, done: !task.done } : task
+      task.id === id ? { ...task, done: !task.done } : task
     );
     setTasks(updatedTasks);
   }
 
-  async function handleDeleteTask(taskId) {
+  async function handleDeleteTask(id) {
     Alert.alert(
       "Delete Task",
       "Are you sure you want to delete this task?",
@@ -71,13 +71,13 @@ export default function ProjectScreen() {
             // Remove task from AsyncStorage
             async function removeTask() {
               try {
-                await AsyncStorage.removeItem(`@task_${taskId}`);
+                await AsyncStorage.removeItem(`@task_${id}`);
               } catch (e) {
                 console.error(e);
               }
             }
             removeTask();
-            const filteredTasks = tasks.filter((task) => task.id !== taskId);
+            const filteredTasks = tasks.filter((task) => task.id !== id);
             setTasks(filteredTasks);
           },
         },
@@ -116,7 +116,7 @@ export default function ProjectScreen() {
       <FlatList
         data={tasks}
         renderItem={renderTaskItem}
-        keyExtractor={(item) => item.taskId}
+        keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContainer}
       />
       <FAB style={styles.fab} onPress={handleAddTask} icon="plus" />
