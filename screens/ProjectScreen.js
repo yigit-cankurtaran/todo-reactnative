@@ -101,7 +101,7 @@ export default function ProjectScreen() {
         left={() => (
           <List.Icon
             color={theme.colors.secondary}
-            icon="drag"
+            icon="delete"
             style={{ backgroundColor: "transparent" }}
           />
         )}
