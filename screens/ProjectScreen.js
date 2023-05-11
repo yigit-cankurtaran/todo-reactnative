@@ -8,7 +8,11 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { FAB, List } from "react-native-paper";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import {
+  useNavigation,
+  useRoute,
+  useFocusEffect,
+} from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import theme from "../Theme";
 
@@ -45,7 +49,7 @@ export default function ProjectScreen() {
       }
     }
     saveTasks();
-  }, [tasks]);
+  }, [id, tasks]);
 
   function handleAddTask() {
     console.log(id);
@@ -119,6 +123,23 @@ export default function ProjectScreen() {
   }
 
   // TODO: Implement tasks updating after adding a new task
+  async function fetchTasks() {
+    try {
+      const jsonValue = await AsyncStorage.getItem(`@tasks_${id}`);
+      if (jsonValue != null) {
+        const loadedTasks = JSON.parse(jsonValue);
+        setTasks(loadedTasks);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchTasks();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
