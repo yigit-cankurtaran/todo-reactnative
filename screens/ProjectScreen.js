@@ -38,6 +38,24 @@ export default function ProjectScreen() {
     loadTasks();
   }, []);
 
+  async function fetchTasks() {
+    try {
+      const jsonValue = await AsyncStorage.getItem(`@tasks_${id}`);
+      if (jsonValue != null) {
+        const loadedTasks = JSON.parse(jsonValue);
+        setTasks(loadedTasks);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchTasks();
+    }, [])
+  );
+
   useEffect(() => {
     async function saveTasks() {
       try {
@@ -121,25 +139,6 @@ export default function ProjectScreen() {
       />
     );
   }
-
-  // TODO: Implement tasks updating after adding a new task
-  async function fetchTasks() {
-    try {
-      const jsonValue = await AsyncStorage.getItem(`@tasks_${id}`);
-      if (jsonValue != null) {
-        const loadedTasks = JSON.parse(jsonValue);
-        setTasks(loadedTasks);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  useFocusEffect(
-    React.useCallback(() => {
-      fetchTasks();
-    }, [])
-  );
 
   return (
     <View style={styles.container}>
