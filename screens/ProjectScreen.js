@@ -23,12 +23,14 @@ export default function ProjectScreen() {
       try {
         const jsonValue = await AsyncStorage.getItem(`@tasks_${id}`);
         if (jsonValue != null) {
-          setTasks(JSON.parse(jsonValue));
+          const loadedTasks = JSON.parse(jsonValue);
+          setTasks(loadedTasks);
         }
       } catch (e) {
         console.log(e);
       }
     }
+
     loadTasks();
   }, []);
 
@@ -75,7 +77,6 @@ export default function ProjectScreen() {
         {
           text: "Delete",
           onPress: () => {
-            // Remove task from AsyncStorage
             async function removeTask() {
               try {
                 await AsyncStorage.removeItem(`@task_${id}`);
@@ -116,6 +117,8 @@ export default function ProjectScreen() {
       />
     );
   }
+
+  // TODO: Implement tasks updating after adding a new task
 
   return (
     <View style={styles.container}>
