@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Alert, FlatList, View, Text, StyleSheet } from "react-native";
+import {
+  Alert,
+  FlatList,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { FAB, List } from "react-native-paper";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -99,13 +106,13 @@ export default function ProjectScreen() {
           />
         )}
         left={() => (
-          <List.Icon
-            color={theme.colors.secondary}
-            icon="delete"
+          <TouchableOpacity
+            onPress={() => handleDeleteTask(item.id)}
             style={{ backgroundColor: "transparent" }}
-          />
+          >
+            <List.Icon color={theme.colors.secondary} icon="delete" />
+          </TouchableOpacity>
         )}
-        onLongPress={() => handleDeleteTask(item.id)}
       />
     );
   }
