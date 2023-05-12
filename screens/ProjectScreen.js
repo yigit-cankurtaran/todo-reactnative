@@ -169,7 +169,7 @@ export default function ProjectScreen() {
               autoFocus
               onSubmitEditing={() => handleFinishEditing(item.id)}
               onBlur={handleCancelEditing}
-              style={{ flex: 1 }}
+              style={{ backgroundColor: "transparent", margin: 0 }}
             />
           ) : (
             item.name
