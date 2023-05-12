@@ -65,6 +65,8 @@ export default function HomeScreen({ navigation }) {
     }
   }
 
+  // TODO: Implement editing project names
+
   function renderItem({ item }) {
     return (
       <List.Item
