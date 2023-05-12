@@ -159,10 +159,12 @@ export default function ProjectScreen() {
   }
 
   function renderTaskItem({ item }) {
+    const isEditingThisTask = editedTaskId === item.id;
+
     return (
       <List.Item
         title={
-          isEditing ? (
+          isEditingThisTask ? (
             <TextInput
               value={editedName}
               onChangeText={setEditedName}
