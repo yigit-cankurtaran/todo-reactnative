@@ -7,7 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { FAB, List } from "react-native-paper";
+import { FAB, List, TextInput } from "react-native-paper";
 import {
   useNavigation,
   useRoute,
@@ -116,10 +116,47 @@ export default function ProjectScreen() {
     );
   }
 
+  // TODO: Implement task name editing
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedName, setEditedName] = useState("");
+  async function handleChangeTaskName() {
+    const updatedTasks = tasks.map((task) =>
+      task.id === id ? { ...task, name: editedName } : task
+    );
+    setTasks(updatedTasks);
+    setIsEditing(false);
+  }
+
+  function handleStartEditing() {
+    setIsEditing(true);
+  }
+  function handleCancelEditing() {
+    setEditedName("");
+    setIsEditing(false);
+  }
+  function handleFinishEditing() {
+    handleChangeTaskName(item.id, editedName);
+    setIsEditing(false);
+  }
+
   function renderTaskItem({ item }) {
     return (
       <List.Item
-        title={item.name}
+        title={
+          isEditing ? (
+            <TextInput
+              value={editedName}
+              onChangeText={setEditedName}
+              autoFocus
+              onSubmitEditing={handleFinishEditing}
+              onBlur={handleCancelEditing}
+              style={{ flex: 1 }}
+              // the above style is needed to make the text input fill the entire width of the list item
+            />
+          ) : (
+            item.name
+          )
+        }
         titleStyle={item.done ? { textDecorationLine: "line-through" } : {}}
         onPress={() => handleToggleTask(item.id)}
         right={() => (
@@ -136,6 +173,7 @@ export default function ProjectScreen() {
             <List.Icon color={theme.colors.secondary} icon="delete" />
           </TouchableOpacity>
         )}
+        onLongPress={handleStartEditing}
       />
     );
   }
