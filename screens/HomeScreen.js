@@ -6,7 +6,7 @@ import {
   Alert,
   TouchableOpacity,
 } from "react-native";
-import { List, Divider, FAB, useTheme } from "react-native-paper";
+import { List, Divider, FAB, useTheme, TextInput } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -15,6 +15,9 @@ export default function HomeScreen({ navigation }) {
   const [projects, setProjects] = useState([]);
   const [shouldFetchProjects, setShouldFetchProjects] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editProjectId, setEditProjectId] = useState(null);
+  const [editProjectName, setEditProjectName] = useState("");
 
   const fetchProjects = async () => {
     try {
@@ -66,14 +69,64 @@ export default function HomeScreen({ navigation }) {
   }
 
   // TODO: Implement editing project names
+  function handleStartEditing(id, initialName) {
+    setIsEditing(true);
+    setEditProjectId(id);
+    setEditProjectName(initialName);
+  }
+
+  function handleCancelEditing() {
+    setIsEditing(false);
+    setEditProjectId(null);
+    setEditProjectName("");
+  }
+
+  async function handleFinishEditing() {
+    if (editProjectName.length === 0) {
+      Alert.alert("Error", "Project name cannot be empty!", [
+        { text: "OK", onPress: handleCancelEditing },
+      ]);
+    } else {
+      try {
+        const updatedProject = projects.map((project) =>
+          project.id === editProjectId
+            ? { ...project, name: editProjectName }
+            : project
+        );
+        await AsyncStorage.setItem(
+          editProjectId.toString(),
+          JSON.stringify({ id: editProjectId, name: editProjectName })
+        );
+        setProjects(updatedProject);
+        setIsEditing(false);
+        setEditProjectId(null);
+        setEditProjectName("");
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }
 
   function renderItem({ item }) {
     return (
       <List.Item
-        title={item.name}
+        title={
+          isEditing && editProjectId === item.id ? (
+            <TextInput
+              value={editProjectName}
+              onChangeText={setEditProjectName}
+              autoFocus
+              onSubmitEditing={handleFinishEditing}
+              onBlur={handleCancelEditing}
+            />
+          ) : (
+            item.name
+          )
+        }
         onPress={() =>
           navigation.navigate("Project", { id: item.id, name: item.name })
         }
+        onLongPress={() => handleStartEditing(item.id, item.name)}
         right={() => (
           <TouchableOpacity
             onPress={() => {
