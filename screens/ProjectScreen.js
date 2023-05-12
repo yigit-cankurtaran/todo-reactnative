@@ -116,27 +116,46 @@ export default function ProjectScreen() {
     );
   }
 
-  // TODO: Implement task name editing
+  // bugs: when editing a task, the task is not updated in the list
+  // when more than one task is present, one long press on a task will trigger the editing of the task below it
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState("");
+  const [editedTaskId, setEditedTaskId] = useState(null);
+
   async function handleChangeTaskName() {
     const updatedTasks = tasks.map((task) =>
-      task.id === id ? { ...task, name: editedName } : task
+      task.id === editedTaskId ? { ...task, name: editedName } : task
     );
     setTasks(updatedTasks);
     setIsEditing(false);
+    setEditedTaskId(null);
+    setEditedName("");
   }
 
-  function handleStartEditing() {
+  function handleStartEditing(id, initialName) {
     setIsEditing(true);
+    setEditedTaskId(id);
+    console.log(`Editing task ${JSON.stringify(id)}`);
+    setEditedName(initialName);
   }
   function handleCancelEditing() {
     setEditedName("");
     setIsEditing(false);
+    console.log(`Editing task ${JSON.stringify(editedTaskId)} cancelled`);
+    setEditedTaskId(null);
   }
   function handleFinishEditing() {
-    handleChangeTaskName(item.id, editedName);
-    setIsEditing(false);
+    if (editedName.length === 0) {
+      Alert.alert("Error", "Task name cannot be empty", [
+        {
+          text: "OK",
+          onPress: handleCancelEditing,
+        },
+      ]);
+    } else {
+      handleChangeTaskName();
+      console.log(`Editing task ${JSON.stringify(editedTaskId)} finished`);
+    }
   }
 
   function renderTaskItem({ item }) {
@@ -148,10 +167,9 @@ export default function ProjectScreen() {
               value={editedName}
               onChangeText={setEditedName}
               autoFocus
-              onSubmitEditing={handleFinishEditing}
+              onSubmitEditing={() => handleFinishEditing(item.id)}
               onBlur={handleCancelEditing}
               style={{ flex: 1 }}
-              // the above style is needed to make the text input fill the entire width of the list item
             />
           ) : (
             item.name
@@ -173,7 +191,7 @@ export default function ProjectScreen() {
             <List.Icon color={theme.colors.secondary} icon="delete" />
           </TouchableOpacity>
         )}
-        onLongPress={handleStartEditing}
+        onLongPress={() => handleStartEditing(item.id, item.name)}
       />
     );
   }
