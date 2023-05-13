@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { DefaultTheme } from "react-native-paper";
 
 const theme = {
@@ -11,5 +11,7 @@ const theme = {
     text: "#333333",
   },
 };
+
+// TODO: Implement dark mode
 
 export default theme;

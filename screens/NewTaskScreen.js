@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
-import { Button } from "react-native-paper";
+import { Button, useTheme } from "react-native-paper";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function NewTaskScreen() {
+  const theme = useTheme();
   const [taskName, setTaskName] = useState("");
   const navigation = useNavigation();
   const route = useRoute();
@@ -33,25 +34,20 @@ export default function NewTaskScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={{ flex: 1, padding: 16 }}>
       <Text>New Task</Text>
       <TextInput
         placeholder="Enter task name."
         value={taskName}
         onChangeText={(text) => setTaskName(text)}
       />
-      <Button title="Save" onPress={saveTask} style={styles.button} />
+      <Button
+        mode="contained"
+        onPress={saveTask}
+        buttonColor={theme.colors.primary}
+      >
+        Save
+      </Button>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  button: {
-    alignSelf: "center",
-    backgroundColor: "purple",
-  },
-});
