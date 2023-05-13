@@ -68,7 +68,6 @@ export default function HomeScreen({ navigation }) {
     }
   }
 
-  // TODO: Implement editing project names
   function handleStartEditing(id, initialName) {
     setIsEditing(true);
     setEditProjectId(id);
@@ -168,7 +167,6 @@ export default function HomeScreen({ navigation }) {
         data={projects}
         renderItem={renderItem}
         keyExtractor={(item) => (item.id ? item.id.toString() : "")}
-        // the above line might be problematic, if so just change the ternary part into just toString()
         ItemSeparatorComponent={() => <Divider />}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
