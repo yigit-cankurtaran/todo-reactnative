@@ -1,9 +1,3 @@
-import React, { useState } from "react";
-import { View } from "react-native";
-import { Button, TextInput, useTheme } from "react-native-paper";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
 export default function NewTaskScreen() {
   const theme = useTheme();
   const [taskName, setTaskName] = useState("");

@@ -1,8 +1,3 @@
-import React, { useState, useEffect } from "react";
-import { View } from "react-native";
-import { TextInput, Button, useTheme } from "react-native-paper";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
 export default function NewProjectScreen({ navigation }) {
   const theme = useTheme();
   const [projectName, setProjectName] = useState("");
