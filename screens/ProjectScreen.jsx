@@ -14,7 +14,6 @@ import {
   useFocusEffect,
 } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import theme from "../Theme";
 
 export default function ProjectScreen() {
   const theme = useTheme();
@@ -208,7 +207,12 @@ export default function ProjectScreen() {
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContainer}
       />
-      <FAB style={styles.fab} onPress={handleAddTask} icon="plus" />
+      <FAB
+        color={theme.colors.secondary}
+        style={styles.fab}
+        onPress={handleAddTask}
+        icon="plus"
+      />
     </View>
   );
 }
