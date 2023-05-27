@@ -7,16 +7,17 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { FAB, List, TextInput } from "react-native-paper";
+import { FAB, List, TextInput, useTheme } from "react-native-paper";
 import {
   useNavigation,
   useRoute,
   useFocusEffect,
 } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import theme from "../Theme";
+// import theme from "../Theme";
 
 export default function ProjectScreen() {
+  const theme = useTheme();
   const route = useRoute();
   const navigation = useNavigation();
   const { id, name } = route.params;

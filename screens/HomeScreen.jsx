@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   FlatList,
@@ -176,7 +176,7 @@ export default function HomeScreen({ navigation }) {
         style={{ position: "absolute", margin: 16, right: 0, bottom: 0 }}
         icon="plus"
         onPress={() => handleNewProject()}
-        color={theme.colors.surface}
+        color={theme.colors.secondary}
       />
     </View>
   );

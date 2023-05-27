@@ -28,11 +28,7 @@ export default function Navigation() {
     <NavigationContainer theme={isDarkTheme ? DarkTheme : DefaultTheme}>
       <Stack.Navigator>
         {/* Pass the theme value as a prop to your HomeScreen component */}
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          initialParams={{ theme: isDarkTheme ? DarkTheme : DefaultTheme }}
-        />
+        <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Project" component={ProjectScreen} />
         <Stack.Screen name="New Project" component={NewProjectScreen} />
         <Stack.Screen name="New Task" component={NewTaskScreen} />
